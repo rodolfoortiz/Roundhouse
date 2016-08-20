@@ -1,34 +1,26 @@
 Framework '4.5.2'
 
 properties {
-    $name = "FlyBuysRewards"
+    $name = "Roundhouse"
     $birthYear = 2016
-    $company = "Headspring"
+    $company = "DefinityFirst"
     $configuration = 'Release'
     $src = resolve-path '.\src'
     $projects = @(gci $src -rec -filter *.csproj)
 
-    if ($env:APPVEYOR -eq "True") {
-        $version = $env:APPVEYOR_BUILD_VERSION
-        $dev_connection_string = $null
-        $test_connection_string = $env:CI_TEST_CONNECTION_STRING
-    } else {
-        $version = '0.0.0.0'
-        $dev_connection_string = get-connection-string "$src\FlyBuysRewards.WebUI\Web.config" "DefaultConnection"
-        $test_connection_string = get-connection-string "$src\FlyBuysRewards.WebUI\Web.config" "DefaultConnection"
-    }
+    $version = '0.0.0.0'
+    $dev_connection_string = get-connection-string "$src\Roundhouse\Web.config" "DefaultConnection"
+    $test_connection_string = get-connection-string "$src\Roundhouse\Web.config" "DefaultConnection"
+    
     Write-Host "Building Version $version"
 
     $roundhouse_dir = "$src\packages\roundhouse.0.8.6\bin"
     $roundhouse_output_dir = "$roundhouse_dir\output"
     $roundhouse_exe_path = "$roundhouse_dir\rh.exe"
     $db_scripts_dir = "$src\Database"
-    $roundhouse_version_file = "$src\FlyBuysRewards.Core\bin\$configuration\FlyBuysRewards.Core.dll"
+    $roundhouse_version_file = "$src\Roundhouse\bin\$configuration\Roundhouse.dll"
 }
 
-task default -depends Compile, RebuildDevDatabase, RebuildTestDatabase, Test
-task dev -depends Compile, UpdateDevDatabase, UpdateTestDatabase, Test
-task ci -depends Compile, RebuildTestDatabase, Test
 task udb -depends UpdateDevDatabase
 
 ########
@@ -56,28 +48,6 @@ function Write-Help-For-Task($task, $description) {
 # Compile and Test #
 ####################
 
-task Test -depends Compile {
-#    $testRunners = @(gci $src\packages -rec -filter Fixie.Console.exe)
-
-#    if ($testRunners.Length -ne 1)
-#    {
-#        throw "Expected to find 1 Fixie.Console.exe, but found $($testRunners.Length)."
-#    }
-
-#    $testRunner = $testRunners[0].FullName
-
-#    foreach ($project in $projects)
-#    {
-#        $projectName = [System.IO.Path]::GetFileNameWithoutExtension($project)
-
-#        if ($projectName.EndsWith("Tests"))
-#        {
-#            $testAssembly = "$($project.Directory)\bin\$configuration\$projectName.dll"
-#            exec { & $testRunner $testAssembly }
-#        }
-#    }
-}
-
 task Compile -depends ConnectionStrings, AssemblyInfo {
     exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
     exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
@@ -87,20 +57,8 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
 # Database Management #
 #######################
 
-task RebuildDevDatabase {
-    deploy-database "Rebuild" $dev_connection_string "DEV"
-}
-
-task RebuildTestDatabase {
-    deploy-database "Rebuild" $test_connection_string "TEST"
-}
-
 task UpdateDevDatabase {
     deploy-database "Update" $dev_connection_string "DEV"
-}
-
-task UpdateTestDatabase {
-    deploy-database "Update" $test_connection_string "TEST"
 }
 
 function deploy-database($action, $connection_string, $env) {
@@ -221,19 +179,7 @@ task AssemblyInfo {
 
         if (Test-Path $assemblyInfoPath)
         {
-            regenerate-file $assemblyInfoPath @"
-using System.Reflection;
-using System.Runtime.InteropServices;
-
-[assembly: ComVisible(false)]
-[assembly: AssemblyProduct("$name")]
-[assembly: AssemblyTitle("$projectName")]
-[assembly: AssemblyVersion("$version")]
-[assembly: AssemblyFileVersion("$version")]
-[assembly: AssemblyCopyright("$copyright")]
-[assembly: AssemblyCompany("$company")]
-[assembly: AssemblyConfiguration("$configuration")]
-"@
+            regenerate-file $assemblyInfoPath
         }
     }
 }

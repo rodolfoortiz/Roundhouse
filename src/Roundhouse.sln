@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roundhouse", "Roundhouse\Ro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roundhouse.Database", "Roundhouse.Database\Roundhouse.Database.csproj", "{10100544-B804-4918-AC0F-1FC5848BAFD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{72066668-109C-496D-B081-08C106B67748}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{10100544-B804-4918-AC0F-1FC5848BAFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10100544-B804-4918-AC0F-1FC5848BAFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10100544-B804-4918-AC0F-1FC5848BAFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72066668-109C-496D-B081-08C106B67748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72066668-109C-496D-B081-08C106B67748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72066668-109C-496D-B081-08C106B67748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72066668-109C-496D-B081-08C106B67748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
