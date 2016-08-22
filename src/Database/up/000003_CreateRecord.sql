@@ -1,0 +1,1 @@
+CREATE TABLE [dbo].[Record](Id int)
