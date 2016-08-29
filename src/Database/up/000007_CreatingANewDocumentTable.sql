@@ -1,0 +1,1 @@
+CREATE TABLE [dbo].[ThirdTable](Id int)
